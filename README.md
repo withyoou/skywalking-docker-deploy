@@ -1,21 +1,21 @@
 # Apache SkyWalking Docker Files
 
-<img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
+> 部署版本7.0, Elasticsearch 7.x
 
-**SkyWalking**: an APM(application performance monitor) system, especially designed for 
-microservices, cloud native and container-based (Docker, Kubernetes, Mesos) architectures.
+## APM部署步骤
 
-# Images
-This repository includes related files of following docker images:
- - OAP server
- - UI
- 
- Documents of each version are in `v-x.y.z/oap` and `v-x.y.z/ui`. Such as [6.4 OAP](6/6.4/oap) and [6.4 UI](6/6.4/ui)
+- 进入7/7.0/oap-es7目录下，修改restart.sh中的`EXT_CONFIG_DIR`为项目的`config`目录
 
-The convenience images are published in docker hub.
-- https://hub.docker.com/r/apache/skywalking-base
-- https://hub.docker.com/r/apache/skywalking-ui
-- https://hub.docker.com/r/apache/skywalking-oap-server
+- 进入7/7.0/ui目录下，修改restart.sh中的`W_OAP_ADDRESS`为宿主机的IP
 
-# License
-[Apache 2.0 License.](/LICENSE)
+- 先执行oap-es7目录下的restart.sh启动oap服务
+
+- 再执行ui目录下的restart.sh启动oap-ui服务
+
+## Agent部署步骤
+
+- 将agent目录及内容放置在需要监控的服务实例上
+
+- 修改agen/config/agent.config中的`collector.backend_service`地址为oap server的地址
+
+- 在启动业务服务的命令行添加javaagent参数 e.g. `java -javaagent:/xx/xx/skywalking-agent.jar -Dskywalking.agent.service_name=Order-Service -jar xx.jar`
